@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{padding:0px;margin:0}
+
+body{background-color:#070200}
+
+nav{ background-color:#260b01; height:40px; margin:0px ; padding:0px}
+nav ul{ list-style:none; margin-right:50px}
+nav ul li{ float:right;}
+nav ul li a{ color:#fff; text-decoration:none; font-size:18px; font-family:sans-serif ; font-weight:bold ;margin-left:20px; line-height:40px; padding:9px}
+nav ul li a:hover{color:#db931d; text-decoration:underline}
+.active{background-color:#a93607}
+
+header{height:100px;background:#5f1900; border-top:4px solid #c3ab9a;border-bottom:4px solid #5d6878; position:relative }
+
+
+header img{position:absolute;left:60px;top:20px;width:300px;height:57px}
+header h1{font-family:'Droid Arabic Naskh',serif;font-size:45px; position:absolute;right:60px;top:0px;color:#f0d842;}
+
+
+.pop{50%{-webkit-transform:scale(1.2);transform:scale(1.2)}100%{-webkit-transform:scale(1);transform:scale(1)}}@keyframes pop{50%{-webkit-transform:scale(1.2);-ms-transform:scale(1.2);transform:scale(1.2)}100%{-webkit-transform:scale(1);-ms-transform:scale(1);transform:scale(1)}}.pop{display:inline-block;-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0);-webkit-box-shadow:0 0 1px rgba(0,0,0,0);box-shadow:0 0 1px rgba(0,0,0,0)}.pop:hover{-webkit-animation-name:pop;animation-name:pop;-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:linear;animation-timing-function:linear;-webkit-animation-iteration-count:1;animation-iteration-count:1}
+
+.container{width:1000px; margin:0 auto}
+
+.bottom{ padding:30px ; background-color:#bc7317; }
+.bottom h1{ text-align:right;margin-right:50px;color:#2F0D01}
+.bottom p{text-align:right;margin-right:10px;font-size:18px}
+
+
+
+footer{height:40px;background:#5f1900; border-top:4px solid #c3ab9a;border-bottom:4px solid #5d6878; text-align:center; color:#f0d842; line-height:40px; ; clear:both }

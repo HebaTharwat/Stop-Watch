@@ -1,0 +1,122 @@
+/*
+ * sarastop.c
+ *
+ *  Created on: 29 Aug 2020
+ *      Author: Heba_Tharwat
+ */
+
+#include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+
+       unsigned char  clock_second=0;                                                                                          //    1 2 4 8   16 32 64 128   256 512 1024 -----
+       unsigned char  clock_minute=0;
+       unsigned char  clock_hour=0;                                                                                            //   0  0 0  1  0   1  1   1    1   1
+
+void timer1_init_compare_mode(void)   // interrupt mode not polling
+{
+   /* Configure the timer control register */
+
+     TCCR1A |=(1<<FOC1A) | (1<<FOC1B);                                  //compare mode
+     TCNT1   = 0;                                          // initial value start from 0 till compare value (mach between them make interrupt) // atsec make interrupt
+     OCR1A   =0x03E8;                                     // at compare value make interrupt
+     TCCR1B |=(1<<CS10)|(1<<CS12)|(1<< WGM12);             // presscaler Fcpu/1024
+     TIMSK  |=(1<<OCIE1A);                                 //enable
+}
+ISR(TIMER1_COMPA_vect)
+
+{
+    /*describe functionality for using timer ?!  to count seconds ,min,hours*/
+
+
+			  clock_second++;  // global variable so it will keep it's value
+
+			  if(clock_second==60)
+				  {  clock_second=0;   // reset it to increment  minute
+					 clock_minute++;
+				  }
+			  if (clock_minute==60)
+			      {
+				      clock_minute=0;   // reset it to increment  hour
+					  clock_hour++;
+				  }
+
+}
+
+
+/*--------function configuration and enable for external INT0---*/
+void INTs_Init(void)
+{
+
+  DDRD  &=~(1<<PD2);              // PD2 as input
+  DDRD  &=~(1<<PD3);                    // PD3 as input
+  DDRB  &=~(1<<PB2);              // PB2 as input
+  PORTD |= (1<<PD2);            // enable pullup
+  PORTB |= (1<<PB2);             // enable pullup
+  GICR  |= (1<<INT0) |(1<<INT1)|(1<<INT2);            // Enable external interrupt pin INT0
+  MCUCR |=(1<<ISC01) |(1<<ISC10)|(1<<ISC11);          //falling ,rising edge
+}
+/*----------ISR for INT0-------------reset stopwatch-----------------*/
+ISR(INT0_vect)
+{
+
+         SREG  |= (1<<7);                 // Enable interrupts by setting I-bit
+         clock_second=0;                        //reset make all digits equal zero
+         clock_minute=0;
+         clock_hour=0;
+}
+
+/*----------ISR for INT1------------pause stopwatch---------*/
+ISR(INT1_vect)
+{
+  TCCR1B &= ~(1<<CS10) & ~(1<<CS11) & ~(1<<CS12); // stop timer
+}
+
+/*----------ISR for INT2----------------resume --------*/
+ISR(INT2_vect)
+{
+   TCCR1B |=(1<<CS12)|(1<<CS10);  // enable to interrupts 1024
+}
+
+int main(void)
+{
+   SREG  |= (1<<7);                        //Enable global interrupts in MC by setting the I-Bit.
+   DDRA  |=0x3F;                            // from pA0 to PA5 output pins for six 7-sement
+   PORTA &=0xC0;                           // initialization six 7-segment off
+   DDRC |=0x0F;                           // output for decoder
+   PORTC &= 0xF0;                        //initilization off
+
+
+   timer1_init_compare_mode();         //calling for all interrupt functions
+   INTs_Init();
+
+ while(1)
+ {
+    PORTA =(PORTA&0xC0)|(0x01); // enable PA0
+    PORTC =(PORTC&0xF0)|(clock_hour/10);   // diplay the last digit in hours
+    _delay_ms(2);
+
+    PORTA =(PORTA&0xC0)|(0x02);  // enable PA1
+    PORTC =(PORTC&0xF0)|(clock_hour%10);
+    _delay_ms(2);
+
+    PORTA =(PORTA&0xC0)|(0x04);
+    PORTC =(PORTC&0xF0)|(clock_minute/10);
+    _delay_ms(2);
+
+    PORTA =(PORTA&0xC0)|(0x08);
+    PORTC =(PORTC&0xF0)|( clock_minute%10);
+    _delay_ms(2);
+
+     PORTA =(PORTA&0xC0)|(0x10);
+    PORTC =(PORTC&0xF0)|(clock_second/10);
+    _delay_ms(2);
+
+    PORTA =(PORTA&0xC0)|(0x20);
+    PORTC =(PORTC&0xF0)|( clock_second%10);
+    _delay_ms(2);
+
+
+
+}
+}

@@ -1,0 +1,20 @@
+15:58:16 **** Incremental Build of configuration Debug for project salsabeel ****
+make all 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega16 salsabeel.elf
+AVR Memory Usage
+----------------
+Device: atmega16
+
+Program:    5444 bytes (33.2% Full)
+(.text + .data + .bootloader)
+
+Data:         11 bytes (1.1% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+15:58:16 Build Finished. 0 errors, 0 warnings. (took 383ms)
+

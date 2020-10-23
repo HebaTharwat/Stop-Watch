@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;StopWatch/StopWatch.c.txt&apos; to &apos;StopWatch.c&apos;" description="Rename resource &apos;StopWatch.c.txt&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="StopWatch.c.txt" name="StopWatch.c" stamp="1598736673120" updateReferences="true"/>
+</session>
